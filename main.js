@@ -1,9 +1,10 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
     const categoryContainer = document.getElementById('categories');
 
-    fetch('functions.php?action=getMenuCategories')
-    .then(response => response.json())
-    .then(result => {
+    try {
+        const response = await fetch('functions.php?action=getMenuCategories');
+        const result = await response.json();
+
         categoryContainer.innerHTML = '';
 
         if (!result.success) {
@@ -20,9 +21,8 @@ document.addEventListener('DOMContentLoaded', function() {
             element.textContent = category.strCategory;
             categoryContainer.appendChild(element);
         });
-    })
-    .catch(error => {
+    } catch (error) {
         console.error('Error fetching categories:', error);
         categoryContainer.innerHTML = '<p>Error loading categories.</p>';
-    });
+    }
 });
