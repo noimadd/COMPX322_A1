@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     let menu_categories = [];
 
+    // flips selected state upon clicking a category
     category_container.addEventListener('click', async function(e) {
         const clicked_item = e.target.closest('.category-item');
 
@@ -11,11 +12,9 @@ document.addEventListener('DOMContentLoaded', async function() {
         let menu_category = menu_categories.find(category => category.name === clicked_item.textContent);
         menu_category.selected = menu_category.selected === '1' ? '0' : '1';
 
-        const response = await fetch('functions.php?action=updateSelection', {
+        // sends updated selection to server
+        await fetch('functions.php?action=updateSelection', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
             body: JSON.stringify({
                 categoryId: menu_category.id,
                 selected: menu_category.selected

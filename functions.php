@@ -4,6 +4,7 @@
     header('Content-Type: application/json');
 
     // retrieves all data from the menuCategories table and returns it as a JSON
+    // @return json object with status and categories data
     function getMenuCategories() {
         global $con;
         $query = "SELECT * FROM menuCategories";
@@ -11,6 +12,10 @@
 
         if (!$result) {
             die('Error executing query: ' . mysqli_error($con));
+            return [
+                'success' => false,
+                'categories' => []
+            ];
         }
 
         $categories = [];
@@ -24,6 +29,9 @@
         ];
     }
 
+    // updates whether a category is selected or not
+    // @param int $categoryId - the id of the category to update
+    // @param int $selected - whether the category is selected or not (1 or 0)
     function updateSelection($categoryId, $selected) {
         global $con;
 
