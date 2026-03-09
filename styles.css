@@ -16,6 +16,10 @@
     --border: oklch(0.635 0.0074 286.19);
     --accent: oklch(0.7665 0.1387 91.06);
 
+    /* secondary colours */
+    --selected: oklch(0.5864 0.097 161.7);
+    --deselected: oklch(0.4574 0.1405 24.6);
+
     /* text colours */
     --text: oklch(0.9212 0.0093 264.06);
     --text-muted: oklch(0.7136 0.0053 240.19);
@@ -51,6 +55,11 @@ h2 {
     text-align: center;
 }
 
+
+
+
+
+/* menu category stuff */
 .category-container {
     margin-inline: auto;
     width: 100%;
@@ -66,5 +75,24 @@ h2 {
 }
 
 .category-item {
+    display: flex;
     align-items: center;
+    background-color: var(--deselected);
+    padding: 2px 5px;
+    border-radius: 5px;
+    transition: all 0.2s ease;
+}
+
+.category-item:hover {
+    background-color: var(--selected);
+    cursor: pointer;
+    transform: scale(1.05);
+}
+
+.category-item:active {
+    transform: scale(0.95);
+}
+
+.category-item.selected {
+    background-color: var(--selected);
 }
