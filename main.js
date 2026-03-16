@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         menu_category.selected = menu_category.selected === '1' ? '0' : '1';
 
         // sends updated selection to server
-        await fetch('functions.php?action=updateSelection', {
+        await fetch('queries.php?action=updateSelection', {
             method: 'POST',
             body: JSON.stringify({
                 categoryId: menu_category.id,
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     // asynchronously fetches menu categories from db and displays them
     try {
-        const response = await fetch('functions.php?action=getMenuCategories');
+        const response = await fetch('queries.php?action=getMenuCategories');
         const result = await response.json();
 
         category_container.innerHTML = '';
@@ -43,6 +43,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         // displays each category
         result.categories.forEach(category => {
             const element = document.createElement('div');
+            const dropDown = document.getElementById('recipe-select');
             element.classList.add('category-item');
 
             element.textContent = category.strCategory;
@@ -50,6 +51,8 @@ document.addEventListener('DOMContentLoaded', async function() {
 
             if (category.selected === '1') {
                 element.classList.add('selected');
+
+                dropDown.innerHTML += `<option value="${category.strCategory}">${category.strCategory}</option>`;
             }
 
             menu_categories[i] = {
@@ -63,4 +66,24 @@ document.addEventListener('DOMContentLoaded', async function() {
         console.error('Error fetching categories:', error);
         category_container.innerHTML = '<p>Error loading categories.</p>';
     }
+    
+    const recipe_select = document.getElementById('recipe-select');
+
+    function handleCategoryChange() {
+        const selected_category = recipe_select.value;
+        console.log('Selected category:', selected_category);
+
+        if (!selected_category) return;
+
+        loadRecipes(selected_category);
+    }
+
+    async function loadRecipes(category) {
+        const response  = await fetch(`mealdb.php?action=getCategoryData&category=${(category)}`);
+        const result = await response.json();
+
+        console.log('Recipes for category:', result);
+    }
+
+    recipe_select.addEventListener('change', handleCategoryChange);
 });

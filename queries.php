@@ -1,6 +1,6 @@
 <?php
     require_once 'db.php';
-
+    
     header('Content-Type: application/json');
 
     // retrieves all data from the menuCategories table and returns it as a JSON

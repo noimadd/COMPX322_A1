@@ -13,8 +13,7 @@
     --bg: oklch(0.2835 0.0145 235.47);
     --bg-alt: oklch(0.2237 0.0103 196.44);
     --shadow: oklch(0.1088 0.0173 285.91);
-    --border: oklch(0.635 0.0074 286.19);
-    --accent: oklch(0.7665 0.1387 91.06);
+    --border: oklch(0.635 0.0074 286.19 / 0.5);
 
     /* secondary colours */
     --selected: oklch(0.5864 0.097 161.7);
@@ -59,7 +58,7 @@ h2 {
 
 
 
-/* menu category stuff */
+/* menu category selection stuff */
 .category-container {
     margin-inline: auto;
     width: 100%;
@@ -95,4 +94,59 @@ h2 {
 
 .category-item.selected {
     background-color: var(--selected);
+}
+
+.category-item.selected:hover {
+    background-color: var(--deselected);
+    cursor: pointer;
+    transform: scale(1.05);
+}
+
+
+
+
+/* recipe stuff */
+.recipe-display-container {
+    display: flex;
+    flex-direction: row;
+    height: 600px;
+    width: 80%;
+    margin: 2rem auto;
+    gap: 3rem;
+}
+
+.recipe-display-item {
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    background-color: var(--bg);
+    overflow-y: auto;
+    border: 1px solid var(--border);
+}
+
+.recipe-selection {
+    flex: 5;
+}
+
+.recipe-information {
+    flex: 3;
+}
+
+
+
+
+
+/* recipe selection */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border);
+    height: fit-content;
+}
+
+.top-bar h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    line-height: 1.2;
 }
