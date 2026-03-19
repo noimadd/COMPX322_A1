@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         let i = 0;
 
-        // displays each category
+        // displays each category in the dropdown 
         result.categories.forEach(category => {
             const element = document.createElement('div');
             const dropDown = document.getElementById('recipe-select');
@@ -70,6 +70,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     
     const recipe_select = document.getElementById('recipe-select');
 
+    // handles category selection and loads recipes for a selected category
     function handleCategoryChange() {
         const selected_category = recipe_select.value;
 
@@ -78,6 +79,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         loadRecipes(selected_category);
     }
 
+    // asynchronously fetches recipes for a given category and displays them
     async function loadRecipes(category) {
         const response  = await fetch(`mealdb.php?action=getCategoryData&category=${(category)}`);
         const result = await response.json();
@@ -100,6 +102,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         
         recipe_item = document.querySelectorAll('.recipe-item');
         
+        // when a recipe is clicked fetch recipe info and display related information
         recipe_item.forEach(item => {
             item.addEventListener('click', async function(e) {
                 const clicked_item = e.target.closest('.recipe-item');
@@ -116,7 +119,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 for (let i = 1; i <= 20; i++) {
                     const ingredient = result.meals[0][`strIngredient${i}`];
                     const measure = result.meals[0][`strMeasure${i}`];
-                    if (ingredient === "") {
+                    if (ingredient === "" || ingredient === null) {
                         break;
                     }
                     ingredients_list.innerHTML += `<li class="ingredient">${measure} ${ingredient}</li>`;

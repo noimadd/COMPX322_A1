@@ -47,9 +47,11 @@
     // creates an api endpooint type system for the frontend to call
     $action = $_GET['action'] ?? '';
     switch ($action) {
+        // case for fetching menu categories
         case 'getMenuCategories':
             echo json_encode(getMenuCategories());
             break;
+        // case for updating category selection
         case 'updateSelection':
             $data = json_decode(file_get_contents('php://input'), true);
             $categoryId = $data['categoryId'] ?? null;
