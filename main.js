@@ -71,7 +71,6 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     function handleCategoryChange() {
         const selected_category = recipe_select.value;
-        console.log('Selected category:', selected_category);
 
         if (!selected_category) return;
 
@@ -81,8 +80,22 @@ document.addEventListener('DOMContentLoaded', async function() {
     async function loadRecipes(category) {
         const response  = await fetch(`mealdb.php?action=getCategoryData&category=${(category)}`);
         const result = await response.json();
+        const recipe_list = document.getElementById('recipe-list');
+        recipe_list.innerHTML = '';
 
         console.log('Recipes for category:', result);
+
+        result.meals.forEach(element => {
+            recipe_list.innerHTML += `
+                <div class="recipe-item-container" data-recipe-id="${element.idMeal}">
+                    <div class="image-container">
+                        <img src="${element.strMealThumb}/small" alt="${element.strMeal}">
+                    </div>
+                    <p>${element.strMeal}</p>
+                    <br/>
+                </div>
+            `;
+        });
     }
 
     recipe_select.addEventListener('change', handleCategoryChange);

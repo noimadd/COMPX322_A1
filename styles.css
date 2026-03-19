@@ -150,3 +150,37 @@ h2 {
     font-size: 1.5rem;
     line-height: 1.2;
 }
+
+
+
+
+/* recipe item display */
+.recipe-list {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.recipe-item-container {
+    background-color: var(--bg-alt);
+    border-radius: 5px;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.image-container {
+    width: 100%;
+    overflow: hidden;
+    border-radius: 5px;
+    margin-bottom: 0.5rem;
+}
+
+.recipe-item-container:hover {
+    background-color: var(--selected);
+    transform: scale(1.05);
+}
