@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     const category_container = document.getElementById('categories');
 
     let menu_categories = [];
+    let recipe_item = "";
 
     // flips selected state upon clicking a category
     category_container.addEventListener('click', async function(e) {
@@ -83,11 +84,9 @@ document.addEventListener('DOMContentLoaded', async function() {
         const recipe_list = document.getElementById('recipe-list');
         recipe_list.innerHTML = '';
 
-        console.log('Recipes for category:', result);
-
         result.meals.forEach(element => {
             recipe_list.innerHTML += `
-                <div class="recipe-item-container" data-recipe-id="${element.idMeal}">
+                <div class="recipe-item" data-recipe-id="${element.idMeal}">
                     <div class="image-container">
                         <img src="${element.strMealThumb}/small" alt="${element.strMeal}">
                     </div>
@@ -95,8 +94,27 @@ document.addEventListener('DOMContentLoaded', async function() {
                     <br/>
                 </div>
             `;
+
+        });
+
+        
+        recipe_item = document.querySelectorAll('.recipe-item');
+        
+        recipe_item.forEach(item => {
+            item.addEventListener('click', async function(e) {
+                const clicked_item = e.target.closest('.recipe-item');
+
+                if (!clicked_item) return;
+                const recipe_id = clicked_item.getAttribute('data-recipe-id');
+
+                const response = await fetch('mealdb.php?action=getRecipeInfo&id=' + recipe_id);
+                const result = await response.json();
+                console.log('Recipe info:', result);
+            });
         });
     }
 
     recipe_select.addEventListener('change', handleCategoryChange);
+
+
 });

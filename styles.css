@@ -157,12 +157,12 @@ h2 {
 /* recipe item display */
 .recipe-list {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 1rem;
     padding: 1rem;
 }
 
-.recipe-item-container {
+.recipe-item {
     background-color: var(--bg-alt);
     border-radius: 5px;
     padding: 0.5rem;
@@ -180,7 +180,7 @@ h2 {
     margin-bottom: 0.5rem;
 }
 
-.recipe-item-container:hover {
+.recipe-item:hover {
     background-color: var(--selected);
     transform: scale(1.05);
 }
