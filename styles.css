@@ -3,6 +3,25 @@
     padding: 0;
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
+
+
+    /* chrome scrollbar styling */
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    /* Thumb (The draggable part) */
+    ::-webkit-scrollbar-thumb {
+        background-color: var(--text-muted);
+        border-radius: 10px;
+        border: 2px solid transparent;
+        background-clip: content-box;
+    }
 }
 
 :root {
@@ -183,4 +202,26 @@ h2 {
 .recipe-item:hover {
     background-color: var(--selected);
     transform: scale(1.05);
+}
+
+
+
+
+/* recipe information */
+.ingredients-list {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+    margin: auto;
+}
+
+.ingredient {
+    padding: 0.25rem;
+    padding-left: 2rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.instructions-text {
+    padding: 2rem;
+    line-height: 1.5;
 }

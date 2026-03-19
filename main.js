@@ -109,7 +109,21 @@ document.addEventListener('DOMContentLoaded', async function() {
 
                 const response = await fetch('mealdb.php?action=getRecipeInfo&id=' + recipe_id);
                 const result = await response.json();
-                console.log('Recipe info:', result);
+
+                const ingredients_list = document.getElementById('ingredients-list');
+                ingredients_list.innerHTML = '';
+
+                for (let i = 1; i <= 20; i++) {
+                    const ingredient = result.meals[0][`strIngredient${i}`];
+                    const measure = result.meals[0][`strMeasure${i}`];
+                    if (ingredient === "") {
+                        break;
+                    }
+                    ingredients_list.innerHTML += `<li class="ingredient">${measure} ${ingredient}</li>`;
+                }
+
+                const instructions = document.getElementById('instructions-text');
+                instructions.textContent = result.meals[0].strInstructions;
             });
         });
     }
