@@ -43,7 +43,10 @@
         case 'getCategoryData':
             $category = $_GET['category'] ?? '';
             if ($category) {
-                echo getCategoryData($category);
+                echo json_encode([
+                    'success' => true,
+                    'data' => json_decode(getCategoryData($category), true)
+                ]); 
             } else {
                 http_response_code(400);
                 echo json_encode([
@@ -56,7 +59,10 @@
         case 'getRecipeInfo':
             $id = $_GET['id'] ?? '';
             if ($id) {
-                echo getRecipeInfo($id);
+                echo json_encode([
+                    'success' => true,
+                    'data' => json_decode(getRecipeInfo($id), true)
+                ]);
             } else {
                 http_response_code(400);
                 echo json_encode([

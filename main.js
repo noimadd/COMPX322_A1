@@ -86,7 +86,12 @@ document.addEventListener('DOMContentLoaded', async function() {
         const recipe_list = document.getElementById('recipe-list');
         recipe_list.innerHTML = '';
 
-        result.meals.forEach(element => {
+        if (!result.success) {
+            recipe_list.innerHTML = '<p>Error loading recipes.</p>';
+            return;
+        }
+
+        result.data.meals.forEach(element => {
             recipe_list.innerHTML += `
                 <div class="recipe-item" data-recipe-id="${element.idMeal}">
                     <div class="image-container">
@@ -108,17 +113,26 @@ document.addEventListener('DOMContentLoaded', async function() {
                 const clicked_item = e.target.closest('.recipe-item');
 
                 if (!clicked_item) return;
+
+                recipe_item.forEach(recipe => recipe.classList.remove('active'));
+                clicked_item.classList.add('active');
+
                 const recipe_id = clicked_item.getAttribute('data-recipe-id');
 
                 const response = await fetch('mealdb.php?action=getRecipeInfo&id=' + recipe_id);
                 const result = await response.json();
 
+                if (!result.success) {
+                    ingredients_list.innerHTML = '<p>Error loading recipe info.</p>';
+                    return;
+                }
+
                 const ingredients_list = document.getElementById('ingredients-list');
                 ingredients_list.innerHTML = '';
 
                 for (let i = 1; i <= 20; i++) {
-                    const ingredient = result.meals[0][`strIngredient${i}`];
-                    const measure = result.meals[0][`strMeasure${i}`];
+                    const ingredient = result.data.meals[0][`strIngredient${i}`];
+                    const measure = result.data.meals[0][`strMeasure${i}`];
                     if (ingredient === "" || ingredient === null) {
                         break;
                     }
@@ -126,7 +140,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 }
 
                 const instructions = document.getElementById('instructions-text');
-                instructions.textContent = result.meals[0].strInstructions;
+                instructions.textContent = result.data.meals[0].strInstructions;
             });
         });
     }

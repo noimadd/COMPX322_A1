@@ -204,6 +204,12 @@ h2 {
     transform: scale(1.05);
 }
 
+.recipe-item.active {
+    background-color: var(--selected);
+    border: 1px solid var(--border);
+    transform: scale(1.02);
+}
+
 
 
 
