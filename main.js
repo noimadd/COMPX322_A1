@@ -1,11 +1,21 @@
-document.addEventListener('DOMContentLoaded', async function() {
-    const category_container = document.getElementById('categories');
+const category_container = document.getElementById('categories'); // bar of categories along the top
+const recipe_select = document.getElementById('recipe-select'); // dropdown menu for selecting a category
+const dropDown = document.getElementById('recipe-select'); // dropdown menu for selecting a category
 
-    let menu_categories = [];
-    let recipe_item = "";
+let menu_categories = []; // stores categories in db
+let recipe_item = ""; // all recipe items displayed based on category
 
-    // flips selected state upon clicking a category
-    category_container.addEventListener('click', async function(e) {
+
+// initialises event handlers and loads categories
+async function init() {
+    setupCategoryClickHandler(); // handles category selection and updates db
+    await loadCategories(); // loads categories from db
+    recipe_select.addEventListener('change', () => handleCategoryChange()); // handles category selection and loads recipes
+}
+
+// flips selected state upon clicking a category
+function setupCategoryClickHandler() {
+    category_container.addEventListener('click', async (e) => {
         const clicked_item = e.target.closest('.category-item');
 
         if (!clicked_item) return;
@@ -24,9 +34,14 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         // toggles the 'selected' class on the clicked category item
         clicked_item.classList.toggle('selected');
-    });
 
-    // asynchronously fetches menu categories from db and displays them
+        dropDown.innerHTML = '<option value="" disabled selected>Select a Category</option>';
+        loadCategories();
+    });
+}
+
+// asynchronously fetches menu categories from db and displays them
+async function loadCategories() {
     try {
         const response = await fetch('queries.php?action=getMenuCategories');
         const result = await response.json();
@@ -44,7 +59,6 @@ document.addEventListener('DOMContentLoaded', async function() {
         // displays each category in the dropdown 
         result.categories.forEach(category => {
             const element = document.createElement('div');
-            const dropDown = document.getElementById('recipe-select');
             element.classList.add('category-item');
 
             element.textContent = category.strCategory;
@@ -67,85 +81,83 @@ document.addEventListener('DOMContentLoaded', async function() {
         console.error('Error fetching categories:', error);
         category_container.innerHTML = '<p>Error loading categories.</p>';
     }
-    
-    const recipe_select = document.getElementById('recipe-select');
+}
 
-    // handles category selection and loads recipes for a selected category
-    function handleCategoryChange() {
-        const selected_category = recipe_select.value;
+// handles category selection and loads recipes for a selected category
+function handleCategoryChange() {
+    const selected_category = recipe_select.value;
 
-        if (!selected_category) return;
+    if (!selected_category) return;
 
-        loadRecipes(selected_category);
+    loadRecipes(selected_category);
+}
+
+// asynchronously fetches recipes for a given category and displays them
+async function loadRecipes(category) {
+    const response  = await fetch(`mealdb.php?action=getCategoryData&category=${(category)}`);
+    const result = await response.json();
+    const recipe_list = document.getElementById('recipe-list');
+    recipe_list.innerHTML = '';
+
+    if (!result.success) {
+        recipe_list.innerHTML = '<p>Error loading recipes.</p>';
+        return;
     }
 
-    // asynchronously fetches recipes for a given category and displays them
-    async function loadRecipes(category) {
-        const response  = await fetch(`mealdb.php?action=getCategoryData&category=${(category)}`);
-        const result = await response.json();
-        const recipe_list = document.getElementById('recipe-list');
-        recipe_list.innerHTML = '';
-
-        if (!result.success) {
-            recipe_list.innerHTML = '<p>Error loading recipes.</p>';
-            return;
-        }
-
-        result.data.meals.forEach(element => {
-            recipe_list.innerHTML += `
-                <div class="recipe-item" data-recipe-id="${element.idMeal}">
-                    <div class="image-container">
-                        <img src="${element.strMealThumb}/small" alt="${element.strMeal}">
-                    </div>
-                    <p>${element.strMeal}</p>
-                    <br/>
+    result.data.meals.forEach(element => {
+        recipe_list.innerHTML += `
+            <div class="recipe-item" data-recipe-id="${element.idMeal}">
+                <div class="image-container">
+                    <img src="${element.strMealThumb}/small" alt="${element.strMeal}">
                 </div>
-            `;
+                    <p>${element.strMeal}</p>
+                <br/>
+            </div>
+        `;
 
-        });
+    });
 
-        
-        recipe_item = document.querySelectorAll('.recipe-item');
-        
-        // when a recipe is clicked fetch recipe info and display related information
-        recipe_item.forEach(item => {
-            item.addEventListener('click', async function(e) {
-                const clicked_item = e.target.closest('.recipe-item');
 
-                if (!clicked_item) return;
+    recipe_item = document.querySelectorAll('.recipe-item');
 
-                recipe_item.forEach(recipe => recipe.classList.remove('active'));
-                clicked_item.classList.add('active');
+    // when a recipe is clicked fetch recipe info and display related information
+    recipe_item.forEach(item => {
+        item.addEventListener('click', async (e) => {
+            const clicked_item = e.target.closest('.recipe-item');
 
-                const recipe_id = clicked_item.getAttribute('data-recipe-id');
+            if (!clicked_item) return;
 
-                const response = await fetch('mealdb.php?action=getRecipeInfo&id=' + recipe_id);
-                const result = await response.json();
+            recipe_item.forEach(recipe => recipe.classList.remove('active'));
+            clicked_item.classList.add('active');
 
-                if (!result.success) {
-                    ingredients_list.innerHTML = '<p>Error loading recipe info.</p>';
-                    return;
-                }
+            const recipe_id = clicked_item.getAttribute('data-recipe-id');
 
+            const response = await fetch('mealdb.php?action=getRecipeInfo&id=' + recipe_id);
+            const result = await response.json();
+
+            if (!result.success) {
                 const ingredients_list = document.getElementById('ingredients-list');
-                ingredients_list.innerHTML = '';
+                ingredients_list.innerHTML = '<p>Error loading recipe info.</p>';
+                return;
+            }
 
-                for (let i = 1; i <= 20; i++) {
-                    const ingredient = result.data.meals[0][`strIngredient${i}`];
-                    const measure = result.data.meals[0][`strMeasure${i}`];
-                    if (ingredient === "" || ingredient === null) {
-                        break;
-                    }
-                    ingredients_list.innerHTML += `<li class="ingredient">${measure} ${ingredient}</li>`;
+            const ingredients_list = document.getElementById('ingredients-list');
+            ingredients_list.innerHTML = '';
+
+            for (let i = 1; i <= 20; i++) {
+                const ingredient = result.data.meals[0][`strIngredient${i}`];
+                const measure = result.data.meals[0][`strMeasure${i}`];
+                if (ingredient === "" || ingredient === null) {
+                    break;
                 }
+                ingredients_list.innerHTML += `<li class="ingredient">${measure} ${ingredient}</li>`;
+            }
 
-                const instructions = document.getElementById('instructions-text');
-                instructions.textContent = result.data.meals[0].strInstructions;
-            });
+            const instructions = document.getElementById('instructions-text');
+            instructions.textContent = result.data.meals[0].strInstructions;
         });
-    }
+    });
+}
 
-    recipe_select.addEventListener('change', handleCategoryChange);
 
-
-});
+document.addEventListener('DOMContentLoaded', init);

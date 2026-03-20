@@ -206,7 +206,8 @@ h2 {
 
 .recipe-item.active {
     background-color: var(--selected);
-    border: 1px solid var(--border);
+    border: 1px solid var(--bg-dark);
+    box-shadow: var(--shadow), 0 0 0 2px var(--selected);
     transform: scale(1.02);
 }
 
