@@ -1,6 +1,5 @@
 const category_container = document.getElementById('categories'); // bar of categories along the top
 const recipe_select = document.getElementById('recipe-select'); // dropdown menu for selecting a category
-const dropDown = document.getElementById('recipe-select'); // dropdown menu for selecting a category
 
 let menu_categories = []; // json array of all category information
 let recipe_item = ""; // all recipe items displayed based on category
@@ -36,7 +35,7 @@ function setupCategoryClickHandler() {
         // toggles the 'selected' class on the clicked category item
         clicked_item.classList.toggle('selected');
 
-        dropDown.innerHTML = '<option value="" disabled selected>Select a Category</option>';
+        recipe_select.innerHTML = '<option value="" disabled selected>Select a Category</option>';
         loadCategories();
     });
 }
@@ -70,7 +69,7 @@ async function loadCategories() {
             if (category.selected === '1') {
                 element.classList.add('selected');
 
-                dropDown.innerHTML += `<option value="${category.strCategory}">${category.strCategory}</option>`;
+                recipe_select.innerHTML += `<option value="${category.strCategory}">${category.strCategory}</option>`;
             }
 
             menu_categories[i] = {
