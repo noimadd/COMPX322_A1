@@ -8,14 +8,12 @@
     /* chrome scrollbar styling */
     ::-webkit-scrollbar {
         width: 8px;
-        height: 8px;
     }
 
     ::-webkit-scrollbar-track {
         background: transparent;
     }
 
-    /* Thumb (The draggable part) */
     ::-webkit-scrollbar-thumb {
         background-color: var(--text-muted);
         border-radius: 10px;

@@ -2,7 +2,7 @@ const category_container = document.getElementById('categories'); // bar of cate
 const recipe_select = document.getElementById('recipe-select'); // dropdown menu for selecting a category
 const dropDown = document.getElementById('recipe-select'); // dropdown menu for selecting a category
 
-let menu_categories = []; // stores categories in db
+let menu_categories = []; // json array of all category information
 let recipe_item = ""; // all recipe items displayed based on category
 
 
@@ -16,10 +16,11 @@ async function init() {
 // flips selected state upon clicking a category
 function setupCategoryClickHandler() {
     category_container.addEventListener('click', async (e) => {
-        const clicked_item = e.target.closest('.category-item');
+        const clicked_item = e.target.closest('.category-item'); // sets clicked item = to click category from top bar
 
         if (!clicked_item) return;
 
+        // finds click category in array and flips selected
         let menu_category = menu_categories.find(category => category.name === clicked_item.textContent);
         menu_category.selected = menu_category.selected === '1' ? '0' : '1';
 
@@ -41,10 +42,12 @@ function setupCategoryClickHandler() {
 }
 
 // asynchronously fetches menu categories from db and displays them
+// all categories are displayed in category bar top screen
+// selected categories are added to the dropdown menu 
 async function loadCategories() {
     try {
-        const response = await fetch('queries.php?action=getMenuCategories');
-        const result = await response.json();
+        const response = await fetch('queries.php?action=getMenuCategories'); // fetches categories from db
+        const result = await response.json(); // parses response as json
 
         category_container.innerHTML = '';
 
@@ -58,7 +61,7 @@ async function loadCategories() {
 
         // displays each category in the dropdown 
         result.categories.forEach(category => {
-            const element = document.createElement('div');
+            const element = document.createElement('div'); // div for each category in the top bar
             element.classList.add('category-item');
 
             element.textContent = category.strCategory;
@@ -93,6 +96,7 @@ function handleCategoryChange() {
 }
 
 // asynchronously fetches recipes for a given category and displays them
+// these are displayed as clickable cards on the left hand side
 async function loadRecipes(category) {
     const response  = await fetch(`mealdb.php?action=getCategoryData&category=${(category)}`);
     const result = await response.json();
@@ -121,12 +125,14 @@ async function loadRecipes(category) {
     recipe_item = document.querySelectorAll('.recipe-item');
 
     // when a recipe is clicked fetch recipe info and display related information
+    // this includes ingredients and instructions which are displayed on the right hand side
     recipe_item.forEach(item => {
         item.addEventListener('click', async (e) => {
             const clicked_item = e.target.closest('.recipe-item');
 
             if (!clicked_item) return;
 
+            // adjusts styling to show selected recipe
             recipe_item.forEach(recipe => recipe.classList.remove('active'));
             clicked_item.classList.add('active');
 
@@ -135,6 +141,7 @@ async function loadRecipes(category) {
             const response = await fetch('mealdb.php?action=getRecipeInfo&id=' + recipe_id);
             const result = await response.json();
 
+            // if success === false -> error
             if (!result.success) {
                 const ingredients_list = document.getElementById('ingredients-list');
                 ingredients_list.innerHTML = '<p>Error loading recipe info.</p>';
@@ -144,6 +151,7 @@ async function loadRecipes(category) {
             const ingredients_list = document.getElementById('ingredients-list');
             ingredients_list.innerHTML = '';
 
+            // iterates through returned ingredients/measures and displays them 
             for (let i = 1; i <= 20; i++) {
                 const ingredient = result.data.meals[0][`strIngredient${i}`];
                 const measure = result.data.meals[0][`strMeasure${i}`];
@@ -153,6 +161,7 @@ async function loadRecipes(category) {
                 ingredients_list.innerHTML += `<li class="ingredient">${measure} ${ingredient}</li>`;
             }
 
+            // displays the instructions
             const instructions = document.getElementById('instructions-text');
             instructions.textContent = result.data.meals[0].strInstructions;
         });
@@ -160,4 +169,5 @@ async function loadRecipes(category) {
 }
 
 
+// initialises app once page had loaded
 document.addEventListener('DOMContentLoaded', init);

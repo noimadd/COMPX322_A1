@@ -1,51 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>COMPX322 - Assignment One</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
-</head>
-<body>
-    <h1>
-        COMPX322 - Assignment One
-    </h1>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>COMPX322 - Assignment One</title>
+        <link rel="stylesheet" href="styles.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <header>
+            <h1>
+                COMPX322 - Assignment One
+            </h1>
+        </header>
 
-    <div class="category-container">
-        <h2>Menu Categories</h2>
-        <div id="categories"></div>
-    </div>
+        <main>
+            <!-- category selection section -->
+            <section class="category-container">
+                <h2>Menu Categories</h2>
+                <div id="categories"></div>
+            </section>
 
-    <div class="recipe-display-container">
-        <div class="recipe-selection recipe-display-item">
-            <div class="top-bar">
-                <h2>
-                    Recipes
-                </h2>
-                <select name="recipe-select" id="recipe-select">
-                    <option value="">Select a Category</option>
-                </select>
-            </div>
-            <div class="recipe-list" id="recipe-list"></div>
-        </div>
-        <div class="recipe-information recipe-display-item" id="recipe-information">
-            <div class="ingredients">
-                <h2>
-                    Ingredients
-                </h2>
-                <ul class="ingredients-list" id="ingredients-list"></ul>
-            </div>
-            <div class="instructions">
-                <h2>
-                    Instructions
-                </h2>
-                <p class="instructions-text" id="instructions-text"></p>
-            </div>
-        </div>
-    </div>
-</body>
-<script src="main.js"></script>
+            <!-- recipe display and selection section -->
+            <section class="recipe-display-container">
+                <!-- recipe selection section -->
+                <section class="recipe-selection recipe-display-item">
+                    <div class="top-bar">
+                        <h2>
+                            Recipes
+                        </h2>
+                        <select name="recipe-select" id="recipe-select">
+                            <option value="">Select a Category</option>
+                        </select>
+                    </div>
+                    <div class="recipe-list" id="recipe-list"></div>
+                </section>
+
+                <!-- recipe information section -->
+                <section class="recipe-information recipe-display-item" id="recipe-information">
+                    <div class="ingredients">
+                        <h2>
+                            Ingredients
+                        </h2>
+                        <ul class="ingredients-list" id="ingredients-list"></ul>
+                    </div>
+                    <div class="instructions">
+                        <h2>
+                            Instructions
+                        </h2>
+                        <p class="instructions-text" id="instructions-text"></p>
+                    </div>
+                </section>
+            </section>
+        </main>
+    </body>
+    <script src="main.js"></script>
 </html>
